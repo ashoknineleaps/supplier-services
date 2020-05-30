@@ -22,6 +22,8 @@ import org.springframework.web.server.ResponseStatusException;
 import com.nineleaps.ecommerce.supplierservice.exception.SupplierNotFoundException;
 import com.nineleaps.ecommerce.supplierservice.model.Supplier;
 import com.nineleaps.ecommerce.supplierservice.service.SupplierService;
+import com.nineleaps.ecommerce.supplierservice.util.ValidatorUtil;
+import com.nineleaps.ecommerce.supplierservice.validators.SupplierValidator;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,6 +37,12 @@ public class SupplierController {
 	
 	@Autowired
 	private SupplierService supplierService;
+	
+	@Autowired
+	private SupplierValidator supplierValidator;
+	
+	@Autowired 
+	private ValidatorUtil validationUtils;
 
 	@ApiOperation(value = "Created new Supplier", response = Supplier.class)
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Successfully Created Supplier"),
@@ -45,6 +53,9 @@ public class SupplierController {
 	})
 	@PostMapping
 	public ResponseEntity<Supplier> createSupplier(@RequestBody Supplier supplierRequest) {
+		
+		validationUtils.validate(supplierValidator, supplierRequest, "supplier");
+		
 		Supplier createSupplier = supplierService.createSupplier(supplierRequest);
 
 		return new ResponseEntity<Supplier>(createSupplier, HttpStatus.CREATED);
@@ -93,9 +104,10 @@ public class SupplierController {
 	@CachePut(key = "#supplierId", value = "suppliers")
 	public Supplier updateSupllierById(@PathVariable UUID supplierId,
 			@RequestBody Supplier supplierRequest) {
-		Supplier supplierResponse = null;
 		try {
-			supplierResponse = supplierService.updateSupllierById(supplierId, supplierRequest);
+			validationUtils.validate(supplierValidator, supplierRequest, "supplier");
+			
+			Supplier supplierResponse = supplierService.updateSupllierById(supplierId, supplierRequest);
 			return supplierResponse;
 
 		} catch (Exception e) {
