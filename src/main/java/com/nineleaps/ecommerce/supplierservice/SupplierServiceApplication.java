@@ -3,11 +3,9 @@ package com.nineleaps.ecommerce.supplierservice;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
-//import org.springframeworkC.cloud.netflix.eureka.EnableEurekaClient;
 
-//@EnableEurekaClient
-@SpringBootApplication
 @EnableCaching
+@SpringBootApplication
 public class SupplierServiceApplication {
 
 	public static void main(String[] args) {

@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+  cassandra:
+    image: cassandra:4.0
+    container_name: cassandra
+    ports:
+      - 9042:9042
+  redis:
+    image: redis:6.0.1
+    container_name: cache
+    command: ["redis-server", "--appendonly", "yes"]
+    expose:
+      - 6379:6379
+  zookeeper:
+    image: zookeeper
+    ports:
+      - 2181:2181
+  kafka:
+    image: spotify/kafka
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.0.4
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_PORT: 9092
+  supplier-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8083:8083
+  depends_on:
+    - cassandra
+    - redis
+    - zookeeper
+    - kafka

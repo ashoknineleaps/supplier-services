@@ -34,14 +34,14 @@ import io.swagger.annotations.ApiResponses;
 @RequestMapping(value = "/v1/api/suppliers")
 @Api(tags = "Suppliers Management RESTful Services", value = "Suppliers services", description = "Controller for Suppliers Management Service")
 public class SupplierController {
-	
+
 	@Autowired
 	private SupplierService supplierService;
-	
+
 	@Autowired
 	private SupplierValidator supplierValidator;
-	
-	@Autowired 
+
+	@Autowired
 	private ValidatorUtil validationUtils;
 
 	@ApiOperation(value = "Created new Supplier", response = Supplier.class)
@@ -53,9 +53,9 @@ public class SupplierController {
 	})
 	@PostMapping
 	public ResponseEntity<Supplier> createSupplier(@RequestBody Supplier supplierRequest) {
-		
+
 		validationUtils.validate(supplierValidator, supplierRequest, "supplier");
-		
+
 		Supplier createSupplier = supplierService.createSupplier(supplierRequest);
 
 		return new ResponseEntity<Supplier>(createSupplier, HttpStatus.CREATED);
@@ -102,11 +102,10 @@ public class SupplierController {
 	})
 	@PutMapping("/{supplierId}")
 	@CachePut(key = "#supplierId", value = "suppliers")
-	public Supplier updateSupllierById(@PathVariable UUID supplierId,
-			@RequestBody Supplier supplierRequest) {
+	public Supplier updateSupllierById(@PathVariable UUID supplierId, @RequestBody Supplier supplierRequest) {
 		try {
 			validationUtils.validate(supplierValidator, supplierRequest, "supplier");
-			
+
 			Supplier supplierResponse = supplierService.updateSupllierById(supplierId, supplierRequest);
 			return supplierResponse;
 

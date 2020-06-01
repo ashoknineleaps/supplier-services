@@ -17,6 +17,12 @@ import com.nineleaps.ecommerce.supplierservice.exception.SupplierNotFoundExcepti
 import com.nineleaps.ecommerce.supplierservice.model.Supplier;
 import com.nineleaps.ecommerce.supplierservice.repository.SupplierRepository;
 
+/**
+ * @name Ashok Kumar
+ * @author nineleaps
+ * @email ashok.kumar@nineleaps.com
+ *
+ */
 @Service
 public class SupplierService {
 
@@ -36,12 +42,20 @@ public class SupplierService {
 	public SupplierService(RedisTemplate<String, Object> redisTemplate) {
 		this.redisTemplate = redisTemplate;
 	}
-
+	
+	/**
+	 * initilize Hash Operation for Redis Operation
+	 */
 	@PostConstruct
 	public void initilizeHashOperation() {
 		hashOperations = redisTemplate.opsForHash();
 	}
 
+	/**
+	 * Create new Supplier
+	 * @param supplier
+	 * @return
+	 */
 	public Supplier createSupplier(Supplier supplier) {
 		Supplier supplierSaved = supplierRepository.save(supplier);
 		hashOperations.put(TABLE_NALE, supplierSaved.getSupplierId(), supplierSaved);
@@ -51,6 +65,13 @@ public class SupplierService {
 		return supplierSaved;
 	}
 
+	/**
+	 * Update Supplier by Id 
+	 * @param supplierId
+	 * @param supplierRequest
+	 * @return
+	 * @throws SupplierNotFoundException
+	 */
 	public Supplier updateSupllierById(UUID supplierId, Supplier supplierRequest) throws SupplierNotFoundException {
 
 		Optional<Supplier> supplierOptional = supplierRepository.findById(supplierId);
@@ -71,6 +92,10 @@ public class SupplierService {
 		return supplierUpdate;
 	}
 
+	/**
+	 * Get All the Supplier
+	 * @return
+	 */
 	public List<Supplier> getAllSuppliers() {
 		List<Supplier> suppliers = supplierRepository.findAll();
 
@@ -78,6 +103,12 @@ public class SupplierService {
 		return suppliers;
 	}
 
+	/**
+	 * Get Supplier by Id
+	 * @param supplierId
+	 * @return
+	 * @throws SupplierNotFoundException
+	 */
 	public Supplier getSupplierById(UUID supplierId) throws SupplierNotFoundException {
 
 		Supplier supplier = hashOperations.get(TABLE_NALE, supplierId);
@@ -100,6 +131,32 @@ public class SupplierService {
 		return supplier;
 	}
 
+	/**
+	 * Get Supplier By Product Id
+	 * @param productId
+	 * @return
+	 * @throws SupplierNotFoundException
+	 */
+	public Supplier getSupplierByProductId(UUID productId) throws SupplierNotFoundException {
+
+		Optional<Supplier> supplierOptional = supplierRepository.getSupplierByProductId(productId);
+
+		if (!supplierOptional.isPresent()) {
+			LOGGER.error("Supplier not found in Supplier respository while getSupplierById");
+			throw new SupplierNotFoundException("Supplier not found in Supplier respository");
+		}
+
+		LOGGER.info("Get the Supplier by Id: " + supplierOptional);
+
+		return supplierOptional.get();
+
+	}
+
+	/**
+	 * Delete Supplier by Id
+	 * @param supplierId
+	 * @throws SupplierNotFoundException
+	 */
 	public void deleteSupplierById(UUID supplierId) throws SupplierNotFoundException {
 
 		Long supplierDeleteById = hashOperations.delete(TABLE_NALE, supplierId);

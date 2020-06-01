@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.data.cassandra.core.mapping.CassandraType;
 import org.springframework.data.cassandra.core.mapping.Column;
+import org.springframework.data.cassandra.core.mapping.Indexed;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
@@ -45,6 +46,7 @@ public class Supplier implements Serializable
 	@CassandraType(type = DataType.Name.UUID)
 	@Column(value = "product_id")
 	@NotNull(message = "Product Id can not be null")
+	@Indexed
 	private UUID productId;
 
 	public UUID getSupplierId() {
