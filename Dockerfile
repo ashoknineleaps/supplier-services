@@ -1,7 +1,5 @@
 FROM openjdk:8
-ARG JAR_FILE=supplier-service/target/*.jar
-ARG PROP_FILE=application.properties
+ARG JAR_FILE=/target/*.jar
 COPY ${JAR_FILE} supplier-service.jar
-COPY ${PROP_FILE} application.properties
-ENTRYPOINT ["java", "-jar", "/supplier-service.jar", "--spring.config.location=application.properties"]
+ENTRYPOINT ["java", "-jar", "/supplier-service.jar"]
 EXPOSE 8083
