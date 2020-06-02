@@ -12,4 +12,4 @@ public class SupplierServiceApplication {
 		SpringApplication.run(SupplierServiceApplication.class, args);
 	}
 
-}
+} 

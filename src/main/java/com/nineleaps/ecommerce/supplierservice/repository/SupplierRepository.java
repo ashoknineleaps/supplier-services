@@ -15,3 +15,5 @@ public interface SupplierRepository extends CassandraRepository<Supplier, UUID> 
 	public Optional<Supplier> getSupplierByProductId(UUID productId);
 
 }
+
+

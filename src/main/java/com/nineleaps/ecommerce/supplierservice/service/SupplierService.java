@@ -30,6 +30,8 @@ public class SupplierService {
 
 	@Autowired
 	private SupplierRepository supplierRepository;
+	
+
 
 	// Redis
 	private static final String TABLE_NALE = "SUPPLIER";
