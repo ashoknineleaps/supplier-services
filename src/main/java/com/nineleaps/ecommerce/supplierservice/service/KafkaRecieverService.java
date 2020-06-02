@@ -29,26 +29,29 @@ public class KafkaRecieverService {
 	public void recieveData(SupplierConsumer supplier) throws SupplierNotFoundException {
 		LOGGER.info("Product ID: " + supplier.toString() + " recieved");
 		LOGGER.info("Supplier Data Consumed from Kafka Broker: " + supplier.toString() + " recieved");
-		
-		try {
-			System.out.println("product id=::"+supplier.items.getProductId());
-			Supplier emaild = supplierService.getSupplierByProductId(supplier.items.getProductId());
-			
-			LOGGER.info("Email Id: "+emaild.getSupplierEmail());
-			
+
+		supplier.getItems().stream().filter(f -> f != null).map(m -> {
+			Supplier emailId = null;
+
+			try {
+				emailId = supplierService.getSupplierByProductId(m.getProductId());
+
+			} catch (SupplierNotFoundException e) {
+				e.printStackTrace();
+			}
 			SimpleMailMessage msg = new SimpleMailMessage();
-			msg.setTo(emaild.getSupplierEmail());
+			msg.setTo(emailId.getSupplierEmail());
 			msg.setSubject("Order Notification Mail");
-			msg.setText(supplier.items.getQuantity()+" orders has been recived for product ID "+supplier.items.getProductId()+" And Order Id is "+supplier.getOrderId());
+			msg.setText(m.getQuantity() + " orders has been recived for product ID " + m.getProductId()
+					+ " And Order Id is " + supplier.getOrderId());
+
 			javaMailSender.send(msg);
-			
-			LOGGER.info("Email Notification sent Successfully");
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		
+
+			return m;
+		});
+
+		LOGGER.info("Email Notification sent Successfully");
+
 	}
 
 }
