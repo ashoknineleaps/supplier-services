@@ -37,7 +37,7 @@ public class KafkaRecieverService {
 				emailId = supplierService.getSupplierByProductId(m.getProductId());
 
 			} catch (SupplierNotFoundException e) {
-				e.printStackTrace();
+				LOGGER.error("Get Supplier by product details failed: "+e.getMessage());
 			}
 			SimpleMailMessage msg = new SimpleMailMessage();
 			msg.setTo(emailId.getSupplierEmail());
