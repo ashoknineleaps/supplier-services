@@ -1,6 +1,7 @@
 package com.nineleaps.ecommerce.supplierservice.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -13,7 +14,8 @@ public class SupplierConsumer implements Serializable {
 	private static final long serialVersionUID = 6883367072300867929L;
 	
 	private UUID orderId;
-	private Date date;
+	
+//	private LocalDateTime date;
 	private String customerName;
 	private String customerEmail;
 	private int total;
@@ -29,13 +31,13 @@ public class SupplierConsumer implements Serializable {
 		this.orderId = orderId;
 	}
 
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
+//	public LocalDateTime getDate() {
+//		return date;
+//	}
+//
+//	public void setDate(LocalDateTime date) {
+//		this.date = date;
+//	}
 
 	public String getCustomerName() {
 		return customerName;
@@ -87,9 +89,10 @@ public class SupplierConsumer implements Serializable {
 
 	@Override
 	public String toString() {
-		return "SupplierConsumer [orderId=" + orderId + ", date=" + date + ", customerName=" + customerName
-				+ ", customerEmail=" + customerEmail + ", total=" + total + ", items=" + items + ", customerAddress="
-				+ customerAddress + ", supplierEmail=" + supplierEmail + "]";
+		return "SupplierConsumer [orderId=" + orderId + ", customerName=" + customerName + ", customerEmail="
+				+ customerEmail + ", total=" + total + ", items=" + items + ", customerAddress=" + customerAddress
+				+ ", supplierEmail=" + supplierEmail + "]";
 	}
+
 	
 }
