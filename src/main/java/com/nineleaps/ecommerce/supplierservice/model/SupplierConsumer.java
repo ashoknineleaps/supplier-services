@@ -12,10 +12,10 @@ public class SupplierConsumer implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 6883367072300867929L;
-	
+
 	private UUID orderId;
-	
-//	private LocalDateTime date;
+
+	//private LocalDateTime date;
 	private String customerName;
 	private String customerEmail;
 	private int total;
@@ -94,5 +94,4 @@ public class SupplierConsumer implements Serializable {
 				+ ", supplierEmail=" + supplierEmail + "]";
 	}
 
-	
 }

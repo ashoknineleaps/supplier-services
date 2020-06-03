@@ -1,15 +1,13 @@
 package com.nineleaps.ecommerce.supplierservice.util;
 
-import java.io.IOException;
+import java.text.ParseException;
 
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.StdDateFormat;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 
 public enum JsonUtil {
@@ -29,7 +27,7 @@ public enum JsonUtil {
 		}
 	}
 
-	public <T> T getObject(String jsonString, Class<T> clazz) {
+	public <T> T getObject(String jsonString, Class<T> clazz) throws ParseException {
 		
 		if(StringUtils.isEmpty(jsonString))
 		{
@@ -37,20 +35,22 @@ public enum JsonUtil {
 		}
 		
 		ObjectMapper mapper = new ObjectMapper();
+		Gson gson = new Gson();
 		
 		try    
 		{
-	        
-			mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-			mapper.disable(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS);
-			mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-            mapper.registerModule(new Jdk8Module());
-			mapper.registerModule(new JavaTimeModule());
-			T readValue = mapper.readValue(jsonString, clazz);
+			T readValueFromGson = gson.fromJson(jsonString, clazz);
 			
-			return readValue;
+//			mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+//			mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+//            mapper.registerModule(new Jdk8Module());
+//            mapper.registerModule(new JSR310Module());
+//			mapper.registerModule(new JavaTimeModule());
+//			T readValue = mapper.readValue(jsonString, clazz);
 			
-		}catch (IOException e) {
+			return readValueFromGson;
+			
+		}catch (JsonSyntaxException e) {
 			
 			throw new RuntimeException(e);
 		}
