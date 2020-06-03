@@ -1,8 +1,5 @@
 package com.nineleaps.ecommerce.supplierservice.service;
 
-import java.text.ParseException;
-
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +13,6 @@ import com.nineleaps.ecommerce.supplierservice.exception.SupplierNotFoundExcepti
 import com.nineleaps.ecommerce.supplierservice.model.Items;
 import com.nineleaps.ecommerce.supplierservice.model.Supplier;
 import com.nineleaps.ecommerce.supplierservice.model.SupplierConsumer;
-import com.nineleaps.ecommerce.supplierservice.util.JsonUtil;
 
 @Service
 public class KafkaRecieverService {
@@ -28,21 +24,6 @@ public class KafkaRecieverService {
 
 	@Autowired
 	private SupplierService supplierService;
-
-//	@KafkaListener(topics = "${spring.kafka.template.default-topic}", groupId = "${spring.kafka.consumer.group-id}")
-//	public void recieveData(ConsumerRecord<?, ?> consumerRecord) throws SupplierNotFoundException {
-//
-//		SupplierConsumer supplierConsumer = null;
-//		try {
-//			supplierConsumer = JsonUtil.INSTANCE.getObject(consumerRecord.value().toString(),
-//					SupplierConsumer.class);
-//		} catch (ParseException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//		System.out.println(supplierConsumer.toString());
-//	}
 
 	@Payload
 	@KafkaListener(topics = "${spring.kafka.template.default-topic}", groupId = "${spring.kafka.consumer.group-id}")
@@ -72,7 +53,7 @@ public class KafkaRecieverService {
 				javaMailSender.send(msg);
 
 				LOGGER.info("Email Notification sent for: " + supplierObject.getSupplierEmail());
-
+				LOGGER.info("Email Notification sent Successfully");
 			}
 
 //			supplier.getItems().stream().filter(f -> f != null).map(item -> {
@@ -94,10 +75,23 @@ public class KafkaRecieverService {
 //				return item;
 //			});
 
-			LOGGER.info("Email Notification sent Successfully");
-
 		} catch (Exception e) {
 			LOGGER.error("Email Notification failed");
 		}
 	}
+
+//	@KafkaListener(topics = "${spring.kafka.template.default-topic}", groupId = "${spring.kafka.consumer.group-id}")
+//	public void recieveData(ConsumerRecord<?, ?> consumerRecord) throws SupplierNotFoundException {
+//
+//		SupplierConsumer supplierConsumer = null;
+//		try {
+//			supplierConsumer = JsonUtil.INSTANCE.getObject(consumerRecord.value().toString(),
+//					SupplierConsumer.class);
+//		} catch (ParseException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//		System.out.println(supplierConsumer.toString());
+//	}
 }
