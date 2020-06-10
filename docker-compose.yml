@@ -1,24 +1,19 @@
 version: "3.8"
 services:
-  cassandra:
-    image: cassandra:latest
-    container_name: cassandra
-    ports:
-      - 9042:9042
   redis:
     image: redis:6.0.1
     container_name: cache
     command: ["redis-server", "--appendonly", "yes"]
     ports:
       - 6379:6379
-  kafka:
-    image: spotify/kafka
-    ports:
-      - 9092:9092
-    environment:
-      KAFKA_ADVERTISED_HOST_NAME: 192.168.0.4
-      KAFKA_ZOOKEEPER_CONNECT: 192.168.0.4:2181
-      KAFKA_ADVERTISED_PORT: 9092
+  #kafka:
+    #image: spotify/kafka
+    #ports:
+      #- 9092:9092
+    #environment:
+      #KAFKA_ADVERTISED_HOST_NAME: 192.168.0.4
+      #KAFKA_ZOOKEEPER_CONNECT: 192.168.0.4:2181
+      #KAFKA_ADVERTISED_PORT: 9092
   supplier-service:
     build:
       context: .
@@ -26,6 +21,5 @@ services:
     ports:
       - 8083:8083
     depends_on:
-      - cassandra
       - redis
-      - kafka
+      #- kafka
